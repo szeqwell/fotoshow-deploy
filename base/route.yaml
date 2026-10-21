@@ -1,0 +1,18 @@
+
+apiVersion: route.openshift.io/v1
+kind: Route
+
+metadata:
+  name: fotoshow
+
+spec:
+  to:
+    kind: Service
+    name: fotoshow
+
+  port:
+    targetPort: http
+
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
