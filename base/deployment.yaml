@@ -1,1 +1,49 @@
 
+
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: fotoshow
+  labels:
+    app: fotoshow
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: fotoshow
+
+  template:
+    metadata:
+      labels:
+        app: fotoshow
+
+    spec:
+      containers:
+        - name: fotoshow
+          image: ghcr.io/szeqwell/fotoshow:latest
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 18181
+              protocol: TCP
+
+          readinessProbe:
+            httpGet:
+              path: /q/health/ready
+              port: 18181
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
+
+          livenessProbe:
+            httpGet:
+              path: /q/health/live
+              port: 18181
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
